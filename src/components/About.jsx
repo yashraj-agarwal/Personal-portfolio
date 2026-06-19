@@ -1,7 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { portfolioData } from '../data/portfolioData';
 import Reveal from './Reveal';
-import { motion, useScroll, useTransform } from 'framer-motion';
 
 const skillRow1 = [
   "Java", "C++", "C", "Python", "JavaScript", "Verilog HDL", 
@@ -23,7 +22,7 @@ const skillRow3 = [
   "Vercel", "Netlify", "Supabase", "Cisco Packet Tracer"
 ];
 
-import { GlassButton } from './ui/glass-button';
+
 
 // ASCII Art Portrait — renders txt as green monospace text on transparent background
 const AsciiPortrait = () => {
@@ -81,36 +80,18 @@ const AsciiPortrait = () => {
   );
 };
 
-const SkillPill = ({ skill }) => {
-  return (
-    <motion.div 
-      whileHover={{ scale: 1.1, zIndex: 10 }} 
-      whileTap={{ scale: 0.95 }} 
-      transition={{ type: "spring", stiffness: 400, damping: 17 }}
-    >
-      <GlassButton 
-        size="lg" 
-        className="shrink-0 group hover:shadow-[0_0_20px_rgba(57,255,20,0.2)] hover:border-[#39ff14]/40 transition-all duration-300"
-        contentClassName="flex items-center gap-3 text-white/90 group-hover:text-[#39ff14] whitespace-nowrap"
-      >
-        <span className="relative z-10">{skill}</span>
-      </GlassButton>
-    </motion.div>
-  );
-};
+// Lightweight pill — no backdrop-filter, no motion wrapper, no GPU compositing layer
+const SkillPill = ({ skill }) => (
+  <span className="shrink-0 inline-flex items-center px-4 py-2 rounded-full text-sm font-medium text-white/80 border border-white/10 bg-white/[0.04] hover:border-[#39ff14]/40 hover:text-[#39ff14] transition-colors duration-200 select-none cursor-default whitespace-nowrap">
+    {skill}
+  </span>
+);
 
 const About = () => {
   const { description } = portfolioData.about;
-  const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], [0, -80]);
 
   return (
-    <section id="about" ref={containerRef} className="py-32 relative z-10 overflow-hidden">
+  <section id="about" className="py-32 relative z-10 overflow-hidden">
       <div className="container mx-auto px-6 max-w-6xl mb-24">
         <Reveal>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -125,7 +106,7 @@ const About = () => {
                   {description}
                 </p>
               </div>
-            <motion.div style={{ y }} className="relative w-full max-w-sm mx-auto md:ml-auto rounded-[32px] overflow-hidden glass-panel p-2 group">
+            <div className="relative w-full max-w-sm mx-auto md:ml-auto rounded-[32px] overflow-hidden glass-panel p-2 group">
               <div className="relative w-full rounded-[24px] overflow-hidden bg-transparent border border-[#39ff14]/15 hover:border-[#39ff14]/40 transition-colors duration-500">
 
                 {/* ASCII Art Text */}
@@ -156,7 +137,7 @@ const About = () => {
                   YRA_2026.ASCII
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </Reveal>
       </div>
@@ -164,11 +145,7 @@ const About = () => {
       {/* Marquee Skills Section */}
       <div className="w-full relative mt-16 fade-edges py-12">
         
-        {/* Left Cinematic Edge Blur */}
-        <div className="absolute top-0 bottom-0 left-0 w-32 md:w-80 z-20 pointer-events-none [mask-image:linear-gradient(to_right,black,transparent)] -webkit-backdrop-filter backdrop-blur-[16px]"></div>
-        
-        {/* Right Cinematic Edge Blur */}
-        <div className="absolute top-0 bottom-0 right-0 w-32 md:w-80 z-20 pointer-events-none [mask-image:linear-gradient(to_left,black,transparent)] -webkit-backdrop-filter backdrop-blur-[16px]"></div>
+
 
         <div className="flex flex-col gap-6">
           {/* Row 1 - Moves Left */}

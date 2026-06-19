@@ -7,8 +7,8 @@ import * as THREE from 'three';
 import ThreeMacbook from './ThreeMacbook';
 import { TextScramble } from './ui/TextScramble';
 
-// 3D WebGL Atmospheric Particles
-function Particles({ count = 120 }) {
+// 3D WebGL Atmospheric Particles — kept lean (60 particles max)
+function Particles({ count = 60 }) {
   const points = useRef();
   
   const [positions, speeds] = useMemo(() => {
@@ -17,21 +17,22 @@ function Particles({ count = 120 }) {
     for (let i = 0; i < count; i++) {
       pos[i * 3] = (Math.random() - 0.5) * 10;
       pos[i * 3 + 1] = (Math.random() - 0.5) * 6;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 5 - 2; // depth
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 5 - 2;
       spd[i] = 0.05 + Math.random() * 0.05;
     }
     return [pos, spd];
   }, [count]);
 
+  const frameCount = useRef(0);
   useFrame((state, delta) => {
     if (!points.current) return;
-    const geo = points.current.geometry;
-    const posAttr = geo.attributes.position;
+    // Only update every other frame — half the CPU work
+    frameCount.current++;
+    if (frameCount.current % 2 !== 0) return;
+    const posAttr = points.current.geometry.attributes.position;
     for (let i = 0; i < count; i++) {
-      posAttr.array[i * 3 + 1] += speeds[i] * delta * 0.8; // slow rise
-      if (posAttr.array[i * 3 + 1] > 3) {
-        posAttr.array[i * 3 + 1] = -3; // reset to bottom
-      }
+      posAttr.array[i * 3 + 1] += speeds[i] * delta * 1.6;
+      if (posAttr.array[i * 3 + 1] > 3) posAttr.array[i * 3 + 1] = -3;
     }
     posAttr.needsUpdate = true;
   });
@@ -39,19 +40,9 @@ function Particles({ count = 120 }) {
   return (
     <points ref={points}>
       <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          args={[positions, 3]}
-        />
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
-      <pointsMaterial
-        size={0.035}
-        color="#39ff14"
-        transparent
-        opacity={0.25}
-        sizeAttenuation
-        depthWrite={false}
-      />
+      <pointsMaterial size={0.035} color="#39ff14" transparent opacity={0.22} sizeAttenuation depthWrite={false} />
     </points>
   );
 }
@@ -215,9 +206,9 @@ export default function Hero() {
           /* Full 3D interactive canvas on desktop */
           <Canvas
             shadows
-            dpr={[1, 2]}
+            dpr={[1, 1.5]}
             camera={{ position: [0, 1.2, 4.8], fov: 38 }}
-            gl={{ antialias: false, alpha: true, toneMappingExposure: 1.1 }}
+            gl={{ antialias: false, alpha: true, toneMappingExposure: 1.1, powerPreference: 'high-performance', preserveDrawingBuffer: false }}
           >
             <ambientLight intensity={0.4} />
             <directionalLight position={[3, 6, 4]} intensity={3.5} castShadow />

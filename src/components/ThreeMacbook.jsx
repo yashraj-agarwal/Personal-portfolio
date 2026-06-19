@@ -13,6 +13,8 @@ export default function ThreeMacbook({ onLoadComplete }) {
 
   // Store RGB materials to animate them
   const rgbMaterials = useRef([]);
+  const rgbFrameCount = useRef(0);
+  const frameSkip = useRef(0);
 
   const onLoadRef = useRef(onLoadComplete);
   useEffect(() => {
@@ -92,15 +94,37 @@ export default function ThreeMacbook({ onLoadComplete }) {
     }
   }, [laptop]);
 
+  // Dispose geometry and materials on unmount to free GPU memory
+  useEffect(() => {
+    return () => {
+      if (laptop) {
+        laptop.traverse((child) => {
+          if (child.isMesh) {
+            child.geometry?.dispose();
+            const mats = Array.isArray(child.material) ? child.material : [child.material];
+            mats.forEach(m => {
+              ['map','normalMap','roughnessMap','metalnessMap','emissiveMap'].forEach(k => m[k]?.dispose());
+              m.dispose();
+            });
+          }
+        });
+      }
+      rgbMaterials.current = [];
+    };
+  }, [laptop]);
+
   useFrame((state) => {
     if (!laptop || !group.current) return;
 
     const time = state.clock.elapsedTime;
 
-    // Animate RGB Lighting with ripple effect
-    rgbMaterials.current.forEach((m, idx) => {
-      m.emissive.setHSL(((time * 0.4) + (idx * 0.05)) % 1, 1, 0.5);
-    });
+    // Animate RGB Lighting — throttled to every 3rd frame (colour shift is imperceptible faster)
+    frameSkip.current++;
+    if (frameSkip.current % 3 === 0 && rgbMaterials.current.length > 0) {
+      rgbMaterials.current.forEach((m, idx) => {
+        m.emissive.setHSL(((time * 0.4) + (idx * 0.05)) % 1, 1, 0.5);
+      });
+    }
 
     // Responsive position and scale adjustments dynamically (placed in North East / top-right)
     const isMobile = size.width < 768;
