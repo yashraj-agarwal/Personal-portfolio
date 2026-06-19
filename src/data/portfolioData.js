@@ -57,8 +57,7 @@ export const portfolioData = {
     {
       id: 1,
       title: "NetSight AI",
-      // Problem → Solution → Impact
-      description: "SOC teams were drowning in alert noise across sprawling infrastructure. I built a distributed NOC/SOC platform that ingests real-time telemetry from 500+ nodes using Scapy packet inspection, then routes critical events to a Llama 3.1 AI Copilot that drafts remediation playbooks automatically — cutting mean time-to-response by an estimated 60%.",
+      description: "Architected a distributed NOC/SOC platform using React, FastAPI, PostgreSQL, Redis Pub/Sub, WebSockets, and Docker, supporting automated device discovery, topology visualization, security monitoring, and real-time analysis of 10,000+ telemetry events across 500+ network nodes. Built Scapy-based packet inspection, protocol analysis, threat detection, and attack simulation workflows, integrating an Ollama (Llama 3.1) AI Copilot for root-cause investigation and automated remediation recommendations.",
       tags: ["React", "FastAPI", "Redis", "Docker", "Llama 3.1"],
       link: "https://github.com/yashraj-agarwal",
       featured: true,
@@ -66,7 +65,7 @@ export const portfolioData = {
     {
       id: 2,
       title: "VaaniPay",
-      description: "200M+ Indians remain locked out of digital banking by language barriers. VaaniPay is a voice-first banking IVR that handles secure transactions in 9 regional languages — powered by Sarvam AI TTS for natural speech and stateful session routing built on Twilio. Won 1st Place at the ACM Hackathon against 60+ teams.",
+      description: "Developed a scalable voice-first banking IVR with Python (Flask) & Twilio API, enabling 7+ offline financial services for feature phones in 9 regional languages. Integrated Sarvam AI TTS to synthesize 260+ dynamic audio prompts, implementing secure stateful routing and RESTful APIs. Won 1st Place at the ACM Hackathon against 60+ teams.",
       tags: ["Python", "Twilio", "Sarvam AI", "Flask"],
       link: "https://github.com/yashraj-agarwal",
       featured: true,
@@ -74,7 +73,10 @@ export const portfolioData = {
     {
       id: 3,
       title: "AeroHealth",
-      description: "Hospital triage was manual and error-prone under peak load. AeroHealth is an Azure-ready NLP triage engine that classifies patient symptoms across 11 departments in real time, plus a predictive capacity model that forecasts bed occupancy 24 hours ahead so administrators can staff proactively.",
+      problem: "ER triage under peak load is done manually, causing patient misrouting across departments and unpredictable bed-capacity crises that administrators can't anticipate.",
+      solution: "Azure-ready NLP engine classifying patient symptoms across 11 departments in real time, plus a predictive capacity model forecasting bed occupancy 24 hours ahead.",
+      impact: "Enables proactive staffing decisions — administrators act on forecasts, not crises.",
+      description: "ER triage under peak load is done manually, causing patient misrouting and unpredictable bed-capacity crises. AeroHealth is an Azure-ready NLP engine that classifies symptoms across 11 departments in real time, paired with a capacity-forecasting model that predicts bed occupancy 24 hours ahead — enabling proactive staffing, not reactive scrambling.",
       tags: ["Next.js", "Azure AI", "NLP"],
       link: "https://github.com/yashraj-agarwal",
       featured: false,
@@ -82,7 +84,10 @@ export const portfolioData = {
     {
       id: 4,
       title: "Project Atlas",
-      description: "Static websites can't communicate the depth of a brand's story. Project Atlas is a scroll-driven 3D web experience built with Three.js and GSAP that guides visitors through an interactive narrative — demonstrating how immersive engineering and motion design compound to increase dwell time and recall.",
+      problem: "Static brand websites feel flat and forgettable — no depth, no narrative arc, no reason for a visitor to stay longer than 10 seconds.",
+      solution: "Scroll-driven 3D web experience built with Three.js + GSAP using custom WebGL shaders, depth-layered parallax, and timeline-synced motion to guide users through a visual narrative.",
+      impact: "Renders at 60 fps across modern browsers; demonstrates how immersive frontend engineering directly increases dwell time and brand recall for creative clients.",
+      description: "Static brand websites feel flat and forgettable — no depth, no reason to stay. Project Atlas is a scroll-driven 3D web experience built with Three.js + GSAP, using custom WebGL shaders and timeline-synced motion to guide users through an immersive brand narrative. Runs at 60 fps — demonstrating how frontend engineering multiplies dwell time and recall for creative clients.",
       tags: ["Three.js", "GSAP", "WebGL"],
       link: "https://github.com/yashraj-agarwal",
       featured: false,

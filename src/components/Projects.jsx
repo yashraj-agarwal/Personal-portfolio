@@ -11,151 +11,195 @@ const GithubIcon = (props) => (
   </svg>
 );
 
-// Shared 3D tilt card — accepts `featured` prop for sizing
-const ProjectCard = ({ project, featured = false }) => {
+// icon map per project
+const ICON_MAP = {
+  netsight: Rocket,
+  vaani: Wifi,
+  aero: HeartPulse,
+  atlas: Layers,
+};
+const getIcon = (title = '') => {
+  const t = title.toLowerCase();
+  if (t.includes('net') || t.includes('sight')) return ICON_MAP.netsight;
+  if (t.includes('vaani') || t.includes('pay'))  return ICON_MAP.vaani;
+  if (t.includes('health'))                        return ICON_MAP.aero;
+  return ICON_MAP.atlas;
+};
+
+/**
+ * ProjectCard
+ * - All cards share the same CARD_HEIGHT so rows align perfectly
+ * - `wide` flag controls whether circle ornaments and description clamp differ
+ */
+const CARD_HEIGHT = 340; // px — uniform for all 4 cards
+
+const ProjectCard = ({ project, wide = false }) => {
   const ref = useRef(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 20 });
-  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 20 });
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], [featured ? '8deg' : '12deg', featured ? '-8deg' : '-12deg']);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], [featured ? '-8deg' : '-12deg', featured ? '8deg' : '12deg']);
+  const sx = useSpring(x, { stiffness: 150, damping: 20 });
+  const sy = useSpring(y, { stiffness: 150, damping: 20 });
+  const rotateX = useTransform(sy, [-0.5, 0.5], ['10deg', '-10deg']);
+  const rotateY = useTransform(sx, [-0.5, 0.5], ['-10deg', '10deg']);
 
-  const handleMouseMove = (e) => {
+  const onMove = (e) => {
     if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    x.set((e.clientX - rect.left) / rect.width - 0.5);
-    y.set((e.clientY - rect.top) / rect.height - 0.5);
+    const r = ref.current.getBoundingClientRect();
+    x.set((e.clientX - r.left) / r.width - 0.5);
+    y.set((e.clientY - r.top)  / r.height - 0.5);
   };
-  const handleMouseLeave = () => { x.set(0); y.set(0); };
+  const onLeave = () => { x.set(0); y.set(0); };
 
-  let LogoIcon = Rocket;
-  if (project.title.toLowerCase().includes('atlas')) LogoIcon = Layers;
-  if (project.title.toLowerCase().includes('health')) LogoIcon = HeartPulse;
-  if (project.title.toLowerCase().includes('vaani') || project.title.toLowerCase().includes('pay')) LogoIcon = Wifi;
+  const LogoIcon = getIcon(project.title);
 
-  const height = featured ? 'h-[420px] md:h-[380px]' : 'h-[310px]';
+  // Circle ornament sizes — slightly larger for wide cards
+  const circles = wide
+    ? [{ s: '130px', z: '20px', d: '0s' }, { s: '105px', z: '40px', d: '0.1s' }, { s: '80px', z: '60px', d: '0.2s' }, { s: '56px', z: '80px', d: '0.3s' }]
+    : [{ s: '110px', z: '20px', d: '0s' }, { s: '88px',  z: '40px', d: '0.1s' }, { s: '66px', z: '60px', d: '0.2s' }, { s: '46px', z: '80px', d: '0.3s' }];
 
   return (
-    <div className={`group w-full ${height} [perspective:1000px]`}>
+    <div
+      className="group w-full [perspective:1000px]"
+      style={{ height: `${CARD_HEIGHT}px` }}
+    >
       <motion.div
         ref={ref}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        style={{ rotateX, rotateY }}
-        className="relative h-full rounded-[36px] bg-gradient-to-br from-zinc-900 to-black shadow-2xl transition-shadow duration-500 [transform-style:preserve-3d] group-hover:[box-shadow:rgba(0,0,0,0.3)_30px_50px_25px_-40px,rgba(0,0,0,0.1)_0px_25px_30px_0px]"
+        onMouseMove={onMove}
+        onMouseLeave={onLeave}
+        style={{ rotateX, rotateY, height: '100%' }}
+        className="relative rounded-[32px] bg-gradient-to-br from-zinc-900 to-black shadow-2xl transition-shadow duration-500 [transform-style:preserve-3d] group-hover:[box-shadow:rgba(0,0,0,0.3)_30px_50px_25px_-40px,rgba(0,0,0,0.1)_0px_25px_30px_0px]"
       >
-        {/* Inner Glass Layer */}
-        <div className="absolute inset-2 rounded-[30px] border-b border-l border-white/20 bg-gradient-to-b from-white/30 to-white/10 backdrop-blur-sm [transform-style:preserve-3d] [transform:translate3d(0,0,25px)]" />
+        {/* Inner glass sheen */}
+        <div className="absolute inset-2 rounded-[26px] border-b border-l border-white/20 bg-gradient-to-b from-white/30 to-white/10 backdrop-blur-sm [transform-style:preserve-3d] [transform:translate3d(0,0,25px)]" />
 
-        {/* Featured badge */}
-        {featured && (
-          <div className="absolute top-6 left-7 [transform:translate3d(0,0,27px)] z-20">
-            <span className="font-spacemono text-[9px] tracking-[0.2em] uppercase text-[#39ff14] border border-[#39ff14]/30 bg-[#39ff14]/5 px-2 py-1 rounded-full">
-              Featured
-            </span>
-          </div>
-        )}
-
-        {/* Tags + Title + Description */}
-        <div className={`absolute [transform:translate3d(0,0,26px)] ${featured ? 'p-7 pt-14' : 'p-7'} pr-[170px]`}>
-          <div className="flex flex-wrap gap-2 mb-4">
+        {/* Content — right padding reserves space for circle ornament */}
+        <div
+          className="absolute [transform:translate3d(0,0,26px)] p-7"
+          style={{ right: wide ? '175px' : '140px', left: 0, top: 0 }}
+        >
+          {/* Tags */}
+          <div className="flex flex-wrap gap-2 mb-3 items-center">
+            {project.featured && (
+              <span className="font-spacemono text-[9px] tracking-[0.2em] uppercase text-[#39ff14] border border-[#39ff14]/30 bg-[#39ff14]/5 px-2 py-1 rounded-full">
+                Featured
+              </span>
+            )}
             {project.tags.map(tag => (
               <span key={tag} className="tag-badge">{tag}</span>
             ))}
           </div>
-          <span className={`section-subtitle block ${featured ? 'text-[1.45rem]' : 'text-[1.2rem]'} leading-tight`}>
+
+          {/* Title */}
+          <p className={`font-bold text-white leading-tight tracking-tight mb-3 ${wide ? 'text-[1.5rem]' : 'text-[1.25rem]'}`}>
             {project.title}
-          </span>
-          <span className={`body-text mt-3 block text-[13px] leading-relaxed ${featured ? 'line-clamp-4' : 'line-clamp-3'}`}>
+          </p>
+
+          {/* Description */}
+          <p className={`text-white/55 text-[13px] leading-relaxed ${wide ? 'line-clamp-6' : 'line-clamp-4'}`}>
             {project.description}
-          </span>
+          </p>
         </div>
 
-        {/* Footer */}
-        <div className="absolute bottom-6 left-7 right-7 flex items-center justify-between [transform-style:preserve-3d] [transform:translate3d(0,0,26px)] z-20">
+        {/* Footer — social icons + View More */}
+        <div className="absolute bottom-6 left-7 right-7 flex items-center justify-between [transform:translate3d(0,0,26px)] z-20">
           <div className="flex gap-3">
             {[
-              { icon: GithubIcon, href: project.link || 'https://github.com', title: 'GitHub' },
-              { icon: Globe, href: project.live || project.link || '#', title: 'Live Demo' },
-            ].map(({ icon: Icon, href, title }, i) => (
-              <a key={i} href={href} target="_blank" rel="noreferrer" title={title}
-                className="group/social grid h-[34px] w-[34px] place-content-center rounded-full bg-white shadow-[rgba(0,0,0,0.5)_0px_7px_5px_-5px] transition-all duration-300 hover:bg-[#39ff14] hover:[transform:translate3d(0,0,40px)] pointer-events-auto">
+              { Icon: GithubIcon, href: project.link || '#', label: 'GitHub' },
+              { Icon: Globe,      href: project.live || project.link || '#', label: 'Live' },
+            ].map(({ Icon, href, label }) => (
+              <a key={label} href={href} target="_blank" rel="noreferrer" title={label}
+                className="grid h-[34px] w-[34px] place-content-center rounded-full bg-white shadow-[rgba(0,0,0,0.5)_0px_7px_5px_-5px] transition-all duration-300 hover:bg-[#39ff14] hover:[transform:translate3d(0,0,40px)] pointer-events-auto">
                 <Icon className="h-[15px] w-[15px] stroke-black" />
               </a>
             ))}
           </div>
-          <a href={project.link || 'https://github.com'} target="_blank" rel="noreferrer"
-            className="group/view relative z-50 pointer-events-auto flex items-center gap-2 px-4 py-2 rounded-full border border-[#39ff14]/30 bg-[#39ff14]/5 text-[#39ff14] font-spacemono text-[11px] tracking-[0.12em] uppercase transition-all duration-300 hover:bg-[#39ff14]/15 hover:border-[#39ff14]/70 hover:shadow-[0_0_18px_rgba(57,255,20,0.2)] hover:[transform:translate3d(0,0,10px)]">
+
+          <a href={project.link || '#'} target="_blank" rel="noreferrer"
+            className="pointer-events-auto flex items-center gap-2 px-4 py-2 rounded-full border border-[#39ff14]/30 bg-[#39ff14]/5 text-[#39ff14] font-spacemono text-[11px] tracking-[0.12em] uppercase transition-all duration-300 hover:bg-[#39ff14]/15 hover:border-[#39ff14]/70 hover:shadow-[0_0_18px_rgba(57,255,20,0.2)]">
             View More
-            <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover/view:translate-x-0.5 group-hover/view:-translate-y-0.5" strokeWidth={2.5} />
+            <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.5} />
           </a>
         </div>
 
-        {/* 3D Decorative Circles & Logo */}
-        <div className={`absolute top-5 right-5 group-hover:-top-5 group-hover:-right-5 transition-all duration-700 ease-in-out ${featured ? 'w-[140px] h-[140px]' : 'w-[120px] h-[120px]'} flex items-center justify-center [transform-style:preserve-3d] pointer-events-none`}>
-          {[
-            { size: featured ? '140px' : '120px', hoverZ: '20px', delay: '0s' },
-            { size: featured ? '115px' : '98px',  hoverZ: '40px', delay: '0.1s' },
-            { size: featured ? '90px'  : '76px',  hoverZ: '60px', delay: '0.2s' },
-            { size: featured ? '65px'  : '54px',  hoverZ: '80px', delay: '0.3s' },
-          ].map((circle, i) => (
+        {/* 3D Circle ornament + logo */}
+        <div className={`absolute top-5 right-5 group-hover:-top-5 group-hover:-right-5 transition-all duration-700 flex items-center justify-center [transform-style:preserve-3d] pointer-events-none`}
+          style={{ width: wide ? '130px' : '110px', height: wide ? '130px' : '110px' }}>
+          {circles.map((c, i) => (
             <div key={i}
-              className="absolute aspect-square rounded-full border border-white/5 bg-white/10 transition-all duration-500 [transform:translate3d(0,0,0px)] group-hover:[transform:translate3d(0,0,var(--hover-z))]"
-              style={{ width: circle.size, '--hover-z': circle.hoverZ, transitionDelay: circle.delay }} />
+              className="absolute aspect-square rounded-full border border-white/5 bg-white/10 transition-all duration-500 [transform:translate3d(0,0,0px)] group-hover:[transform:translate3d(0,0,var(--hz))]"
+              style={{ width: c.s, '--hz': c.z, transitionDelay: c.d }} />
           ))}
-          <div className={`absolute grid aspect-square ${featured ? 'w-[46px]' : 'w-[40px]'} place-content-center rounded-full bg-white shadow-[0_10px_20px_rgba(0,0,0,0.3)] transition-all duration-700 [transform:translate3d(0,0,10px)] group-hover:[transform:translate3d(0,0,140px)]`}>
-            <LogoIcon className="w-5 h-5 stroke-black" />
+          <div className="absolute grid aspect-square w-[38px] place-content-center rounded-full bg-white shadow-[0_10px_20px_rgba(0,0,0,0.3)] transition-all duration-700 [transform:translate3d(0,0,10px)] group-hover:[transform:translate3d(0,0,120px)]">
+            <LogoIcon className="w-[18px] h-[18px] stroke-black" />
           </div>
         </div>
+
       </motion.div>
     </div>
   );
 };
 
+/**
+ * Layout:
+ *   Row 1 ── full-width  (NetSight AI   — featured)
+ *   Row 2 ── two halves  (VaaniPay  +  AeroHealth)
+ *   Row 3 ── full-width  (Project Atlas)
+ * All 4 cards share the same CARD_HEIGHT.
+ */
 const Projects = () => {
-  const featured = portfolioData.projects.filter(p => p.featured);
-  const regular  = portfolioData.projects.filter(p => !p.featured);
+  const projects = portfolioData.projects; // [0] NetSight, [1] VaaniPay, [2] AeroHealth, [3] Atlas
 
   return (
     <section id="projects" className="py-32 relative z-10">
       <div className="container mx-auto px-6 max-w-6xl">
+
+        {/* Section header */}
         <Reveal>
-          <div className="mb-20 flex flex-col md:flex-row md:items-end justify-between gap-8">
+          <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
             <div>
-              <div className="section-label mb-6 inline-block border border-white/10 rounded-full px-3 py-1 bg-white/[0.02]">
+              <div className="section-label mb-5 inline-block border border-white/10 rounded-full px-3 py-1 bg-white/[0.02]">
                 Selected Work
               </div>
               <h2 className="section-title">
                 Featured <span className="text-white/50">Projects.</span>
               </h2>
             </div>
-            <a href="https://github.com/yashraj-agarwal" target="_blank" rel="noreferrer"
+            <a
+              href="https://github.com/yashraj-agarwal"
+              target="_blank" rel="noreferrer"
               className="group self-start md:self-end flex items-center gap-2 px-6 py-3 font-syncopate text-[11px] font-bold tracking-[0.18em] uppercase text-[#080808] bg-[#e2e2e2] transition-all duration-300 hover:bg-[#39ff14] hover:-translate-y-1 active:scale-[0.96]"
-              style={{ clipPath: 'polygon(0 0, 100% 0, 100% 68%, 91% 100%, 0 100%)' }}>
-              View All Projects
+              style={{ clipPath: 'polygon(0 0, 100% 0, 100% 68%, 91% 100%, 0 100%)' }}
+            >
+              View All
               <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={2.5} />
             </a>
           </div>
         </Reveal>
 
-        {/* Row 1: Two featured hero cards — larger, with "Featured" badge */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-6 md:mb-8">
-          {featured.map((project, i) => (
-            <Reveal key={project.id} delay={i * 0.1}>
-              <ProjectCard project={project} featured={true} />
-            </Reveal>
-          ))}
+        {/* ── Row 1: NetSight AI — full width ── */}
+        <Reveal delay={0}>
+          <div className="mb-5">
+            <ProjectCard project={projects[0]} wide={true} />
+          </div>
+        </Reveal>
+
+        {/* ── Row 2: VaaniPay — full width ── */}
+        <Reveal delay={0.05}>
+          <div className="mb-5">
+            <ProjectCard project={projects[1]} wide={true} />
+          </div>
+        </Reveal>
+
+        {/* ── Row 3: AeroHealth + Project Atlas — two halves ── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+          <Reveal delay={0.1}>
+            <ProjectCard project={projects[2]} wide={false} />
+          </Reveal>
+          <Reveal delay={0.15}>
+            <ProjectCard project={projects[3]} wide={false} />
+          </Reveal>
         </div>
 
-        {/* Row 2–3: Two regular cards — same grid, smaller height */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-          {regular.map((project, i) => (
-            <Reveal key={project.id} delay={i * 0.08}>
-              <ProjectCard project={project} featured={false} />
-            </Reveal>
-          ))}
-        </div>
       </div>
     </section>
   );
