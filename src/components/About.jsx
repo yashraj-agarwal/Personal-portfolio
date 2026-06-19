@@ -114,17 +114,17 @@ const About = () => {
       <div className="container mx-auto px-6 max-w-6xl mb-24">
         <Reveal>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div className="text-left">
-              <div className="section-label mb-6 inline-block border border-white/10 rounded-full px-3 py-1 bg-white/[0.02]">
-                About Me
+              <div className="text-left">
+                <div className="section-label mb-6 inline-block border border-white/10 rounded-full px-3 py-1 bg-white/[0.02]">
+                  About Me
+                </div>
+                <h2 className="section-title mb-8">
+                  I build things <br/><span className="text-white/50">people screenshot.</span>
+                </h2>
+                <p className="body-text text-lg md:text-xl">
+                  {description}
+                </p>
               </div>
-              <h2 className="section-title mb-8">
-                Designing with <br/><span className="text-white/50">purpose.</span>
-              </h2>
-              <p className="body-text text-lg md:text-xl">
-                {description}
-              </p>
-            </div>
             <motion.div style={{ y }} className="relative w-full max-w-sm mx-auto md:ml-auto rounded-[32px] overflow-hidden glass-panel p-2 group">
               <div className="relative w-full rounded-[24px] overflow-hidden bg-transparent border border-[#39ff14]/15 hover:border-[#39ff14]/40 transition-colors duration-500">
 

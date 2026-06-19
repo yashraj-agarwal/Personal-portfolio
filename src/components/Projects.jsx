@@ -2,8 +2,7 @@ import React, { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { portfolioData } from '../data/portfolioData';
 import Reveal from './Reveal';
-
-import { Globe, ArrowUpRight, Rocket, Layers, HeartPulse } from 'lucide-react';
+import { Globe, ArrowUpRight, Rocket, Layers, HeartPulse, Wifi } from 'lucide-react';
 
 const GithubIcon = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -12,16 +11,15 @@ const GithubIcon = (props) => (
   </svg>
 );
 
-const ProjectCard = ({ project }) => {
+// Shared 3D tilt card — accepts `featured` prop for sizing
+const ProjectCard = ({ project, featured = false }) => {
   const ref = useRef(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-
   const mouseXSpring = useSpring(x, { stiffness: 150, damping: 20 });
   const mouseYSpring = useSpring(y, { stiffness: 150, damping: 20 });
-
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['12deg', '-12deg']);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-12deg', '12deg']);
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], [featured ? '8deg' : '12deg', featured ? '-8deg' : '-12deg']);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], [featured ? '-8deg' : '-12deg', featured ? '8deg' : '12deg']);
 
   const handleMouseMove = (e) => {
     if (!ref.current) return;
@@ -29,16 +27,17 @@ const ProjectCard = ({ project }) => {
     x.set((e.clientX - rect.left) / rect.width - 0.5);
     y.set((e.clientY - rect.top) / rect.height - 0.5);
   };
-
   const handleMouseLeave = () => { x.set(0); y.set(0); };
 
-  // Pick icon by project title
   let LogoIcon = Rocket;
   if (project.title.toLowerCase().includes('atlas')) LogoIcon = Layers;
   if (project.title.toLowerCase().includes('health')) LogoIcon = HeartPulse;
+  if (project.title.toLowerCase().includes('vaani') || project.title.toLowerCase().includes('pay')) LogoIcon = Wifi;
+
+  const height = featured ? 'h-[420px] md:h-[380px]' : 'h-[310px]';
 
   return (
-    <div className="group h-[340px] w-full [perspective:1000px]">
+    <div className={`group w-full ${height} [perspective:1000px]`}>
       <motion.div
         ref={ref}
         onMouseMove={handleMouseMove}
@@ -49,69 +48,63 @@ const ProjectCard = ({ project }) => {
         {/* Inner Glass Layer */}
         <div className="absolute inset-2 rounded-[30px] border-b border-l border-white/20 bg-gradient-to-b from-white/30 to-white/10 backdrop-blur-sm [transform-style:preserve-3d] [transform:translate3d(0,0,25px)]" />
 
+        {/* Featured badge */}
+        {featured && (
+          <div className="absolute top-6 left-7 [transform:translate3d(0,0,27px)] z-20">
+            <span className="font-spacemono text-[9px] tracking-[0.2em] uppercase text-[#39ff14] border border-[#39ff14]/30 bg-[#39ff14]/5 px-2 py-1 rounded-full">
+              Featured
+            </span>
+          </div>
+        )}
+
         {/* Tags + Title + Description */}
-        <div className="absolute [transform:translate3d(0,0,26px)] p-7 pr-[185px]">
+        <div className={`absolute [transform:translate3d(0,0,26px)] ${featured ? 'p-7 pt-14' : 'p-7'} pr-[170px]`}>
           <div className="flex flex-wrap gap-2 mb-4">
             {project.tags.map(tag => (
               <span key={tag} className="tag-badge">{tag}</span>
             ))}
           </div>
-          <span className="section-subtitle block text-[1.25rem] leading-tight">
+          <span className={`section-subtitle block ${featured ? 'text-[1.45rem]' : 'text-[1.2rem]'} leading-tight`}>
             {project.title}
           </span>
-          <span className="body-text mt-3 block text-[13px] leading-relaxed line-clamp-3">
+          <span className={`body-text mt-3 block text-[13px] leading-relaxed ${featured ? 'line-clamp-4' : 'line-clamp-3'}`}>
             {project.description}
           </span>
         </div>
 
         {/* Footer */}
         <div className="absolute bottom-6 left-7 right-7 flex items-center justify-between [transform-style:preserve-3d] [transform:translate3d(0,0,26px)] z-20">
-          {/* Social links */}
           <div className="flex gap-3">
             {[
               { icon: GithubIcon, href: project.link || 'https://github.com', title: 'GitHub' },
               { icon: Globe, href: project.live || project.link || '#', title: 'Live Demo' },
             ].map(({ icon: Icon, href, title }, i) => (
-              <a
-                key={i}
-                href={href}
-                target="_blank"
-                rel="noreferrer"
-                title={title}
-                className="group/social grid h-[34px] w-[34px] place-content-center rounded-full bg-white shadow-[rgba(0,0,0,0.5)_0px_7px_5px_-5px] transition-all duration-300 hover:bg-[#39ff14] hover:[transform:translate3d(0,0,40px)] pointer-events-auto"
-              >
+              <a key={i} href={href} target="_blank" rel="noreferrer" title={title}
+                className="group/social grid h-[34px] w-[34px] place-content-center rounded-full bg-white shadow-[rgba(0,0,0,0.5)_0px_7px_5px_-5px] transition-all duration-300 hover:bg-[#39ff14] hover:[transform:translate3d(0,0,40px)] pointer-events-auto">
                 <Icon className="h-[15px] w-[15px] stroke-black" />
               </a>
             ))}
           </div>
-
-          {/* View more — neon green pill button */}
-          <a
-            href={project.link || 'https://github.com'}
-            target="_blank"
-            rel="noreferrer"
-            className="group/view relative z-50 pointer-events-auto flex items-center gap-2 px-4 py-2 rounded-full border border-[#39ff14]/30 bg-[#39ff14]/5 text-[#39ff14] font-spacemono text-[11px] tracking-[0.12em] uppercase transition-all duration-300 hover:bg-[#39ff14]/15 hover:border-[#39ff14]/70 hover:shadow-[0_0_18px_rgba(57,255,20,0.2)] hover:[transform:translate3d(0,0,10px)]"
-          >
+          <a href={project.link || 'https://github.com'} target="_blank" rel="noreferrer"
+            className="group/view relative z-50 pointer-events-auto flex items-center gap-2 px-4 py-2 rounded-full border border-[#39ff14]/30 bg-[#39ff14]/5 text-[#39ff14] font-spacemono text-[11px] tracking-[0.12em] uppercase transition-all duration-300 hover:bg-[#39ff14]/15 hover:border-[#39ff14]/70 hover:shadow-[0_0_18px_rgba(57,255,20,0.2)] hover:[transform:translate3d(0,0,10px)]">
             View More
             <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover/view:translate-x-0.5 group-hover/view:-translate-y-0.5" strokeWidth={2.5} />
           </a>
         </div>
 
         {/* 3D Decorative Circles & Logo */}
-        <div className="absolute top-5 right-5 group-hover:-top-5 group-hover:-right-5 transition-all duration-700 ease-in-out w-[155px] h-[155px] flex items-center justify-center [transform-style:preserve-3d] pointer-events-none">
+        <div className={`absolute top-5 right-5 group-hover:-top-5 group-hover:-right-5 transition-all duration-700 ease-in-out ${featured ? 'w-[140px] h-[140px]' : 'w-[120px] h-[120px]'} flex items-center justify-center [transform-style:preserve-3d] pointer-events-none`}>
           {[
-            { size: '155px', hoverZ: '20px', delay: '0s' },
-            { size: '128px', hoverZ: '40px', delay: '0.1s' },
-            { size: '100px', hoverZ: '60px', delay: '0.2s' },
-            { size: '72px',  hoverZ: '80px', delay: '0.3s' },
+            { size: featured ? '140px' : '120px', hoverZ: '20px', delay: '0s' },
+            { size: featured ? '115px' : '98px',  hoverZ: '40px', delay: '0.1s' },
+            { size: featured ? '90px'  : '76px',  hoverZ: '60px', delay: '0.2s' },
+            { size: featured ? '65px'  : '54px',  hoverZ: '80px', delay: '0.3s' },
           ].map((circle, i) => (
-            <div
-              key={i}
-              className="absolute aspect-square rounded-full border border-white/5 bg-white/10 shadow-[0_0_15px_rgba(255,255,255,0.05)] transition-all duration-500 [transform:translate3d(0,0,0px)] group-hover:[transform:translate3d(0,0,var(--hover-z))]"
-              style={{ width: circle.size, '--hover-z': circle.hoverZ, transitionDelay: circle.delay }}
-            />
+            <div key={i}
+              className="absolute aspect-square rounded-full border border-white/5 bg-white/10 transition-all duration-500 [transform:translate3d(0,0,0px)] group-hover:[transform:translate3d(0,0,var(--hover-z))]"
+              style={{ width: circle.size, '--hover-z': circle.hoverZ, transitionDelay: circle.delay }} />
           ))}
-          <div className="absolute grid aspect-square w-[46px] place-content-center rounded-full bg-white shadow-[0_10px_20px_rgba(0,0,0,0.3)] transition-all duration-700 [transform:translate3d(0,0,10px)] group-hover:[transform:translate3d(0,0,140px)]">
+          <div className={`absolute grid aspect-square ${featured ? 'w-[46px]' : 'w-[40px]'} place-content-center rounded-full bg-white shadow-[0_10px_20px_rgba(0,0,0,0.3)] transition-all duration-700 [transform:translate3d(0,0,10px)] group-hover:[transform:translate3d(0,0,140px)]`}>
             <LogoIcon className="w-5 h-5 stroke-black" />
           </div>
         </div>
@@ -121,6 +114,9 @@ const ProjectCard = ({ project }) => {
 };
 
 const Projects = () => {
+  const featured = portfolioData.projects.filter(p => p.featured);
+  const regular  = portfolioData.projects.filter(p => !p.featured);
+
   return (
     <section id="projects" className="py-32 relative z-10">
       <div className="container mx-auto px-6 max-w-6xl">
@@ -134,26 +130,29 @@ const Projects = () => {
                 Featured <span className="text-white/50">Projects.</span>
               </h2>
             </div>
-
-            {/* Upgraded "View All" button — matches CTA clip-path style */}
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noreferrer"
+            <a href="https://github.com/yashraj-agarwal" target="_blank" rel="noreferrer"
               className="group self-start md:self-end flex items-center gap-2 px-6 py-3 font-syncopate text-[11px] font-bold tracking-[0.18em] uppercase text-[#080808] bg-[#e2e2e2] transition-all duration-300 hover:bg-[#39ff14] hover:-translate-y-1 active:scale-[0.96]"
-              style={{ clipPath: 'polygon(0 0, 100% 0, 100% 68%, 91% 100%, 0 100%)' }}
-            >
+              style={{ clipPath: 'polygon(0 0, 100% 0, 100% 68%, 91% 100%, 0 100%)' }}>
               View All Projects
               <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={2.5} />
             </a>
           </div>
         </Reveal>
 
-        {/* Symmetric 2-col grid — no parallax offset so rows stay aligned */}
+        {/* Row 1: Two featured hero cards — larger, with "Featured" badge */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-6 md:mb-8">
+          {featured.map((project, i) => (
+            <Reveal key={project.id} delay={i * 0.1}>
+              <ProjectCard project={project} featured={true} />
+            </Reveal>
+          ))}
+        </div>
+
+        {/* Row 2–3: Two regular cards — same grid, smaller height */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-          {portfolioData.projects.map((project, i) => (
+          {regular.map((project, i) => (
             <Reveal key={project.id} delay={i * 0.08}>
-              <ProjectCard project={project} />
+              <ProjectCard project={project} featured={false} />
             </Reveal>
           ))}
         </div>

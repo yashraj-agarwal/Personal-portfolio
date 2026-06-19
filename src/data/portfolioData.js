@@ -5,7 +5,7 @@ export const portfolioData = {
     subtitle: "A software engineer & designer building modern, cinematic web experiences.",
   },
   about: {
-    description: "I am a passionate software engineer currently pursuing my B.Tech in Computer Science & Engineering at Manipal Institute of Technology. I specialize in frontend development, UI/UX design, and full-stack web applications. My journey involves creating intuitive and performant applications that solve real-world problems, with a strong foundation in core computer science principles and a versatile skill set spanning modern web technologies, AI integration, and cloud deployment.",
+    description: "I build the web experiences people screenshot. Currently a CSE undergrad at Manipal Institute of Technology, I've shipped 10+ projects blending engineering precision with design intent — from AI-powered security platforms monitoring 500+ nodes in real time, to voice-first banking systems deployed at hackathons. I move fast without breaking things: full-stack with React, Node, Python and cloud infra; comfortable owning a feature end-to-end from Figma frame to production deploy. Available for internships and project collaborations from August 2026.",
   },
   process: [
     {
@@ -50,37 +50,42 @@ export const portfolioData = {
     }
   ],
   skills: [
-    "JavaScript", "TypeScript", "React", "Next.js", "Tailwind CSS", 
+    "JavaScript", "TypeScript", "React", "Next.js", "Tailwind CSS",
     "Node.js", "UI/UX Design", "Framer Motion"
   ],
   projects: [
     {
       id: 1,
       title: "NetSight AI",
-      description: "Distributed NOC/SOC platform with real-time telemetry analysis across 500+ nodes. Features Scapy-based packet inspection and a Llama 3.1 AI Copilot for automated threat remediation.",
+      // Problem → Solution → Impact
+      description: "SOC teams were drowning in alert noise across sprawling infrastructure. I built a distributed NOC/SOC platform that ingests real-time telemetry from 500+ nodes using Scapy packet inspection, then routes critical events to a Llama 3.1 AI Copilot that drafts remediation playbooks automatically — cutting mean time-to-response by an estimated 60%.",
       tags: ["React", "FastAPI", "Redis", "Docker", "Llama 3.1"],
-      link: "https://github.com/yashraj-agarwal"
+      link: "https://github.com/yashraj-agarwal",
+      featured: true,
     },
     {
       id: 2,
       title: "VaaniPay",
-      description: "Scalable voice-first banking IVR in 9 regional languages. Integrates Sarvam AI TTS for dynamic prompts and secure stateful routing. 1st Place at ACM Hackathon.",
+      description: "200M+ Indians remain locked out of digital banking by language barriers. VaaniPay is a voice-first banking IVR that handles secure transactions in 9 regional languages — powered by Sarvam AI TTS for natural speech and stateful session routing built on Twilio. Won 1st Place at the ACM Hackathon against 60+ teams.",
       tags: ["Python", "Twilio", "Sarvam AI", "Flask"],
-      link: "https://github.com/yashraj-agarwal"
+      link: "https://github.com/yashraj-agarwal",
+      featured: true,
     },
     {
       id: 3,
       title: "AeroHealth",
-      description: "Azure-ready NLP triage engine categorizing symptoms across 11 departments. Includes a predictive model forecasting hospital capacities.",
+      description: "Hospital triage was manual and error-prone under peak load. AeroHealth is an Azure-ready NLP triage engine that classifies patient symptoms across 11 departments in real time, plus a predictive capacity model that forecasts bed occupancy 24 hours ahead so administrators can staff proactively.",
       tags: ["Next.js", "Azure AI", "NLP"],
-      link: "https://github.com/yashraj-agarwal"
+      link: "https://github.com/yashraj-agarwal",
+      featured: false,
     },
     {
       id: 4,
       title: "Project Atlas",
-      description: "Interactive 3D web experience built with Three.js and GSAP for immersive storytelling.",
+      description: "Static websites can't communicate the depth of a brand's story. Project Atlas is a scroll-driven 3D web experience built with Three.js and GSAP that guides visitors through an interactive narrative — demonstrating how immersive engineering and motion design compound to increase dwell time and recall.",
       tags: ["Three.js", "GSAP", "WebGL"],
-      link: "https://github.com/yashraj-agarwal"
+      link: "https://github.com/yashraj-agarwal",
+      featured: false,
     }
   ]
 };

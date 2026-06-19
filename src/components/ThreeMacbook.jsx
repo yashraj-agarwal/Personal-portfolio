@@ -5,7 +5,7 @@ import * as THREE from 'three';
 
 export default function ThreeMacbook({ onLoadComplete }) {
   const group = useRef();
-  const { scene: laptop } = useGLTF('/asus_rog_strix_scar_17_2023_g733_gaming_laptop.glb');
+  const { scene: laptop } = useGLTF('/laptop.glb');
   const baseQuaternion = useRef(new THREE.Quaternion());
   const { camera, mouse, size } = useThree();
   const target = useRef({ x: 0, y: 0 });
@@ -150,4 +150,4 @@ export default function ThreeMacbook({ onLoadComplete }) {
   );
 }
 
-useGLTF.preload('/asus_rog_strix_scar_17_2023_g733_gaming_laptop.glb');
+useGLTF.preload('/laptop.glb');

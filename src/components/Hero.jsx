@@ -191,30 +191,49 @@ export default function Hero() {
         }}
       />
 
-      {/* Three.js Canvas */}
+      {/* 3D Canvas (desktop only) OR Static image (mobile/tablet) */}
       <motion.div style={{ y: laptopY, opacity }} className="absolute inset-0 z-[250] pointer-events-none">
-        <Canvas
-          shadows={!isMobileOrTablet}
-          dpr={isMobileOrTablet ? [1, 1.5] : [1, 2]}
-          camera={{ position: [0, 1.2, 4.8], fov: isMobileOrTablet ? 55 : 38 }}
-          gl={{ antialias: false, alpha: true, toneMappingExposure: 1.1 }}
-        >
-          <ambientLight intensity={0.4} />
-          <directionalLight position={[3, 6, 4]} intensity={3.5} castShadow={!isMobileOrTablet} />
-          <directionalLight position={[-5, 2, 2]} intensity={0.7} color="#8899cc" />
-          <directionalLight position={[0, -2, -5]} intensity={0.45} color="#ff5522" />
-          <Suspense fallback={null}>
-            <Environment preset="city" />
-            <ThreeMacbook onLoadComplete={handleLoadComplete} />
-            <Particles count={isMobileOrTablet ? 50 : 140} />
-            {!isMobileOrTablet && (
+        {isMobileOrTablet ? (
+          /* Static laptop render — no WebGL, no battery drain on mobile */
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={{ opacity: loaded ? 1 : 0, scale: loaded ? 1 : 0.92 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute inset-0 flex items-center justify-center"
+            onAnimationStart={() => setLoaded(true)}
+          >
+            <img
+              src="/laptop-static.png"
+              alt="ASUS ROG laptop — 3D render"
+              className="w-[85vw] max-w-[420px] object-contain drop-shadow-[0_0_80px_rgba(57,255,20,0.12)]"
+              style={{ transform: 'translate(5%, -8%)' }}
+              onLoad={() => setLoaded(true)}
+              onError={() => setLoaded(true)}
+            />
+          </motion.div>
+        ) : (
+          /* Full 3D interactive canvas on desktop */
+          <Canvas
+            shadows
+            dpr={[1, 2]}
+            camera={{ position: [0, 1.2, 4.8], fov: 38 }}
+            gl={{ antialias: false, alpha: true, toneMappingExposure: 1.1 }}
+          >
+            <ambientLight intensity={0.4} />
+            <directionalLight position={[3, 6, 4]} intensity={3.5} castShadow />
+            <directionalLight position={[-5, 2, 2]} intensity={0.7} color="#8899cc" />
+            <directionalLight position={[0, -2, -5]} intensity={0.45} color="#ff5522" />
+            <Suspense fallback={null}>
+              <Environment preset="city" />
+              <ThreeMacbook onLoadComplete={handleLoadComplete} />
+              <Particles count={140} />
               <EffectComposer disableNormalPass multisampling={0}>
                 <FXAA />
                 <Bloom luminanceThreshold={1.2} luminanceSmoothing={0.9} intensity={1.5} />
               </EffectComposer>
-            )}
-          </Suspense>
-        </Canvas>
+            </Suspense>
+          </Canvas>
+        )}
       </motion.div>
 
       {/* UI overlay */}
