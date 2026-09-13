@@ -4,49 +4,78 @@ export const portfolioData = {
     roles: ["Developer", "Designer", "Shipper"],
     subtitle: "A software engineer & designer building modern, cinematic web experiences.",
   },
+
   about: {
     description: "I build the web experiences people screenshot. Currently a CSE undergrad at Manipal Institute of Technology, I've shipped 10+ projects blending engineering precision with design intent — from AI-powered security platforms monitoring 500+ nodes in real time, to voice-first banking systems deployed at hackathons. I move fast without breaking things: full-stack with React, Node, Python and cloud infra; comfortable owning a feature end-to-end from Figma frame to production deploy. Available for internships and project collaborations from August 2026.",
   },
-  process: [
+  achievements: [
     {
       id: 1,
-      title: "System Architecture",
-      description: "Designing scalable data models, system interactions, and robust infrastructure before writing code.",
-      icon: "architecture"
+      title: "Top 50 - NameSpace Hackhazards 2026",
+      description: "Largest international hackathon with 31000+ participants.",
+      icon: "trophy"
     },
     {
       id: 2,
-      title: "Core Engineering",
-      description: "Developing clean, maintainable backend logic and performant frontend architectures.",
-      icon: "engineering"
+      title: "Top 250 - Microsoft AI Unlocked Hackathon 2026",
+      description: "Competed globally building innovative AI-driven solutions.",
+      icon: "star"
     },
     {
       id: 3,
-      title: "Automation & CI/CD",
-      description: "Building automated pipelines, data ETLs, and testing suites to ensure reliability and rapid iteration.",
-      icon: "automation"
+      title: "SIH Regional Finalist 2026",
+      description: "Smart India Hackathon Regional Finalist for developing impactful tech solutions.",
+      icon: "medal"
     },
     {
       id: 4,
-      title: "Deployment & Scaling",
-      description: "Deploying to cloud platforms with continuous monitoring and optimization for scale.",
-      icon: "deployment"
+      title: "1st Place - ACM Hackathon 2026",
+      description: "Architected and pitched project VaaniPay, securing first place at Manipal ACM Hackathon.",
+      icon: "crown"
+    },
+    {
+      id: 5,
+      title: "1st Place - iDesign",
+      description: "TechTatva 2025: Designed an AI-powered in-car infotainment system in Figma.",
+      icon: "crown"
+    },
+    {
+      id: 6,
+      title: "1st Place - Negative Space 2026",
+      description: "IECSE UI/UX Competition: Conceived an end-to-end college discovery platform.",
+      icon: "crown"
+    }
+  ],
+  education: [
+    {
+      id: 1,
+      degree: "Bachelor of Technology in Computer Science & Engineering",
+      institution: "Manipal Institute of Technology",
+      duration: "July 2024 - July 2028",
+      description: "Location: Manipal, Karnataka, India."
+    },
+    {
+      id: 2,
+      degree: "High School (12th Grade), ISC",
+      institution: "The Assam Valley School",
+      duration: "April 2021 - April 2023",
+      description: "Location: Tezpur, Assam, India."
     }
   ],
   experience: [
     {
       id: 1,
-      role: "Winter Intern",
+      role: "Software Developer Intern",
       company: "Universal Systems",
-      duration: "Dec 2025 - Jan 2026",
-      description: "Developed a full-stack business analytics platform using React.js, Node.js, and MongoDB to centralize operational and financial data from multiple sources. Built automated ETL and analysis pipelines in Python to process and analyze 100,000+ records, reducing report generation time by 80%."
+      duration: "May 2026 - July 2026",
+      description: "Designed and deployed a client-facing business website end-to-end using Astro, TypeScript, HTML, CSS, achieving 100/100 Lighthouse Performance and SEO score. Built a business analytics dashboard using Python, Pandas, NumPy to process daily inventory and business data for EDA, trend analysis, inventory insights and statistical reporting to support data-driven decisions."
     },
     {
       id: 2,
-      role: "UI/UX & Frontend Development",
+      role: "Frontend Developer",
       company: "Froker (Freelance)",
       duration: "May 2025 - July 2025",
-      description: "Designed 25+ mobile and web interfaces in Figma, covering user flows, wireframes, and high-fidelity designs. Implemented frontend components using HTML, CSS, and JavaScript, ensuring responsive layouts and smooth user interactions, and contributed to 15+ client projects improving user experience."
+      description: "Collaborated remotely with a large tech team to help scale a MERN-stack app from a few hundred to 50,000+ downloads, gathering and translating requirements into interface specifications and high-fidelity prototypes. Built React frontend features across 20+ client projects from requirement discussions through deployment, driving repeat engagements through consistent client trust."
     }
   ],
   skills: [
@@ -57,16 +86,16 @@ export const portfolioData = {
     {
       id: 1,
       title: "NetSight AI",
-      description: "Architected a distributed NOC/SOC platform using React, FastAPI, PostgreSQL, Redis Pub/Sub, WebSockets, and Docker, supporting automated device discovery, topology visualization, security monitoring, and real-time analysis of 10,000+ telemetry events across 500+ network nodes. Built Scapy-based packet inspection, protocol analysis, threat detection, and attack simulation workflows, integrating an Ollama (Llama 3.1) AI Copilot for root-cause investigation and automated remediation recommendations.",
-      tags: ["React", "FastAPI", "Redis", "Docker", "Llama 3.1"],
+      description: "Built a distributed, event-driven network monitoring platform (Redis Pub/Sub, WebSockets, Docker) processing 10,000+ real-time telemetry across 500+ nodes, cutting manual triage time for anomaly detection. Implemented Scapy-based packet inspection and threat-detection pipelines with an integrated LLM diagnostics copilot to automate root-cause analysis and shorten incident-response time.",
+      tags: ["FastAPI", "Redis", "Docker", "Scapy", "WebSockets"],
       link: "https://github.com/yashraj-agarwal",
       featured: true,
     },
     {
       id: 2,
       title: "VaaniPay",
-      description: "Developed a scalable voice-first banking IVR with Python (Flask) & Twilio API, enabling 7+ offline financial services for feature phones in 9 regional languages. Integrated Sarvam AI TTS to synthesize 260+ dynamic audio prompts, implementing secure stateful routing and RESTful APIs. Won 1st Place at the ACM Hackathon against 60+ teams.",
-      tags: ["Python", "Twilio", "Sarvam AI", "Flask"],
+      description: "Designed a voice-first UPI payments solution for financial inclusion, built on a Twilio-based IVR system that lets feature-phone users authorize transactions over standard voice calls delivering 7+ offline banking workflows with zero internet dependency for underserved users. Engineered a fault-tolerant session recovery mechanism and secured transactions with bcrypt MPIN validation, integrating Sarvam AI to dynamically route 260+ voice interactions across 9 regional languages.",
+      tags: ["Python", "FastAPI", "Twilio", "Sarvam AI", "bcrypt"],
       link: "https://github.com/yashraj-agarwal",
       featured: true,
     },
@@ -76,8 +105,8 @@ export const portfolioData = {
       problem: "ER triage under peak load is done manually, causing patient misrouting across departments and unpredictable bed-capacity crises that administrators can't anticipate.",
       solution: "Azure-ready NLP engine classifying patient symptoms across 11 departments in real time, plus a predictive capacity model forecasting bed occupancy 24 hours ahead.",
       impact: "Enables proactive staffing decisions — administrators act on forecasts, not crises.",
-      description: "ER triage under peak load is done manually, causing patient misrouting and unpredictable bed-capacity crises. AeroHealth is an Azure-ready NLP engine that classifies symptoms across 11 departments in real time, paired with a capacity-forecasting model that predicts bed occupancy 24 hours ahead — enabling proactive staffing, not reactive scrambling.",
-      tags: ["Next.js", "Azure AI", "NLP"],
+      description: "Built an AI-driven healthcare routing platform dispatching patients to optimal hospitals in real time, using Azure AI Language to extract clinical entities from free-textsymptoms and classify across 11 departments and 5 urgency levels, with a rule-based fallback ensuring the system degrades gracefully if Azure is unreachable. Designed a 6-variable weighted forecasting model predicting each hospital’s 60-minute occupancy, feeding a hospital-scoring engine that dynamically reroutes ambulances via OSRM traffic-aware routing when a destination saturates en route.",
+      tags: ["React", "Node.js", "Azure AI", "Socket.IO", "OpenRouteService"],
       link: "https://github.com/yashraj-agarwal",
       featured: false,
     },

@@ -3,15 +3,16 @@ import { portfolioData } from '../data/portfolioData';
 import Reveal from './Reveal';
 
 const skillRow1 = [
-  "Java", "C++", "C", "Python", "JavaScript", "Verilog HDL",
-  "HTML", "CSS", "React.js", "Node.js", "Express.js", "REST APIs",
-  "OOP", "DBMS", "Operating Systems", "Computer Networks"
+  "Java", "C++", "C", "Python", "JavaScript", "Verilog HDL", "SQL",
+  "HTML", "CSS", "React.js", "Vite", "Node.js", "Express.js", "REST APIs",
+  "Flask", "Supabase", "MySQL", "OOP", "DBMS", "Operating Systems", "Computer Networks"
 ];
 
 const skillRow2 = [
   "LLMs", "AI Agents", "Prompt Engineering", "RAG Fundamentals",
-  "MySQL", "MongoDB", "Git", "GitHub", "Docker", "VS Code",
-  "Postman", "Power BI", "PostgreSQL", "Redis", "Oracle Cloud (OCI)"
+  "PostgreSQL", "MongoDB", "Redis", "Microsoft Azure", "Oracle Cloud (OCI)",
+  "Vercel", "Docker", "n8n", "Git", "GitHub", "VS Code", "Postman", "Power BI",
+  "Data Structures", "Algorithms"
 ];
 
 const skillRow3 = [
@@ -19,7 +20,7 @@ const skillRow3 = [
   "User Research", "Responsive Design", "Accessibility (WCAG)",
   "Information Architecture", "Figma", "Adobe Photoshop",
   "Adobe Premiere Pro", "Canva", "Adobe Illustrator",
-  "Vercel", "Netlify", "Supabase", "Cisco Packet Tracer"
+  "Tailwind CSS", "Next.js", "Framer Motion", "Netlify", "Cisco Packet Tracer"
 ];
 
 // ASCII Art Portrait

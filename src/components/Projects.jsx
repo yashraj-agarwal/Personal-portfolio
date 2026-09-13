@@ -104,19 +104,21 @@ const ProjectCard = ({ project, wide = false }) => {
         <div className="absolute bottom-6 left-7 right-7 flex items-center justify-between [transform:translate3d(0,0,26px)] z-20">
           <div className="flex gap-3">
             {[
-              { Icon: GithubIcon, href: project.link || '#', label: 'GitHub' },
-              { Icon: Globe,      href: project.live || project.link || '#', label: 'Live' },
+              { Icon: GithubIcon, href: project.link || '#', label: `GitHub repo for ${project.title}` },
+              { Icon: Globe,      href: project.live || project.link || '#', label: `Live demo for ${project.title}` },
             ].map(({ Icon, href, label }) => (
-              <a key={label} href={href} target="_blank" rel="noreferrer" title={label}
+              <a key={label} href={href} target="_blank" rel="noreferrer" title={label} aria-label={label}
                 className="grid h-[34px] w-[34px] place-content-center rounded-full bg-white shadow-[rgba(0,0,0,0.5)_0px_7px_5px_-5px] transition-all duration-300 hover:bg-[#39ff14] hover:[transform:translate3d(0,0,40px)] pointer-events-auto">
                 <Icon className="h-[15px] w-[15px] stroke-black" />
+                <span className="sr-only">{label}</span>
               </a>
             ))}
           </div>
 
-          <a href={project.link || '#'} target="_blank" rel="noreferrer"
+          <a href={project.link || '#'} target="_blank" rel="noreferrer" aria-label={`View more details about ${project.title}`}
             className="pointer-events-auto flex items-center gap-2 px-4 py-2 rounded-full border border-[#39ff14]/30 bg-[#39ff14]/5 text-[#39ff14] font-spacemono text-[11px] tracking-[0.12em] uppercase transition-all duration-300 hover:bg-[#39ff14]/15 hover:border-[#39ff14]/70 hover:shadow-[0_0_18px_rgba(57,255,20,0.2)]">
-            View More
+            <span>View More</span>
+            <span className="sr-only"> about {project.title}</span>
             <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.5} />
           </a>
         </div>

@@ -17,8 +17,12 @@
     overflow-x: hidden;
   }
   body {
-    @apply bg-background text-primary font-sans leading-relaxed overflow-x-hidden min-h-screen cursor-none selection:bg-accent-blue/30 selection:text-white;
+    @apply bg-background text-primary font-sans leading-relaxed min-h-screen cursor-none selection:bg-accent-blue/30 selection:text-white;
     width: 100%;
+    overflow-x: hidden;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
   
   a, button, input, textarea {
@@ -61,6 +65,8 @@
   }
   .body-text {
     @apply text-[15px] leading-relaxed text-white/60 max-w-2xl;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .btn-primary {

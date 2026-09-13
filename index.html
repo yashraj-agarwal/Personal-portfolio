@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="canonical" href="https://yashrajagarwal.co.in/" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- SEO -->
@@ -13,20 +15,83 @@
 
     <!-- Open Graph -->
     <meta property="og:title" content="Yash Raj Agarwal — Developer & Designer" />
-    <meta property="og:description" content="Full-stack developer and designer crafting premium, immersive digital experiences." />
+    <meta property="og:description" content="Portfolio of Yash Raj Agarwal — CSE undergrad at MIT Manipal. Full-stack developer (React, Node.js, Python, Docker) and UI/UX designer." />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://yashrajagarwal.co.in/" />
+    <meta property="og:image" content="https://yashrajagarwal.co.in/portfolio/og-image.jpg" />
+    <meta property="og:site_name" content="Yash Raj Agarwal Portfolio" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Yash Raj Agarwal — Developer & Designer" />
-    <meta name="twitter:description" content="Full-stack developer and designer crafting premium, immersive digital experiences." />
+    <meta name="twitter:description" content="Portfolio of Yash Raj Agarwal — CSE undergrad at MIT Manipal. Full-stack developer (React, Node.js, Python, Docker) and UI/UX designer." />
+    <meta name="twitter:image" content="https://yashrajagarwal.co.in/portfolio/og-image.jpg" />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": "https://yashrajagarwal.co.in/#person",
+            "name": "Yash Raj Agarwal",
+            "url": "https://yashrajagarwal.co.in/",
+            "jobTitle": "Full-Stack Developer & UI/UX Designer",
+            "alumniOf": {
+              "@type": "CollegeOrUniversity",
+              "name": "Manipal Institute of Technology"
+            },
+            "sameAs": [
+              "https://github.com/yashraj-agarwal",
+              "https://linkedin.com/in/yashraj-agarwal"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://yashrajagarwal.co.in/#website",
+            "url": "https://yashrajagarwal.co.in/",
+            "name": "Yash Raj Agarwal Portfolio",
+            "publisher": {
+              "@id": "https://yashrajagarwal.co.in/#person"
+            }
+          }
+        ]
+      }
+    </script>
 
     <!-- Preconnect for Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- SEO Fallback HTML for bots -->
+      <div style="display: none; visibility: hidden;">
+        <h1>Yash Raj Agarwal</h1>
+        <h2>Full-Stack Developer & UI/UX Designer</h2>
+        <p>I build the web experiences people screenshot. Currently a CSE undergrad at Manipal Institute of Technology, I've shipped 10+ projects blending engineering precision with design intent.</p>
+        <section>
+          <h3>Projects</h3>
+          <article>
+            <h4>NetSight AI</h4>
+            <p>Distributed, event-driven network monitoring platform processing 10,000+ real-time telemetry across 500+ nodes.</p>
+          </article>
+          <article>
+            <h4>VaaniPay</h4>
+            <p>Voice-first UPI payments solution built on a Twilio-based IVR system delivering offline banking workflows.</p>
+          </article>
+          <article>
+            <h4>AeroHealth</h4>
+            <p>AI-driven healthcare routing platform dispatching patients to optimal hospitals in real time.</p>
+          </article>
+          <article>
+            <h4>Project Atlas</h4>
+            <p>Scroll-driven 3D web experience built with Three.js + GSAP using custom WebGL shaders.</p>
+          </article>
+        </section>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

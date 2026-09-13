@@ -1,10 +1,14 @@
 import React, { useRef } from 'react';
 import { portfolioData } from '../data/portfolioData';
 import Reveal from './Reveal';
-import { Layers, Code2, GitMerge, Rocket } from 'lucide-react';
+import { Trophy, Star, Medal, Crown, Layers, Code2, GitMerge, Rocket } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 const iconMap = {
+  trophy: <Trophy size={32} className="text-white" />,
+  star: <Star size={32} className="text-white" />,
+  medal: <Medal size={32} className="text-white" />,
+  crown: <Crown size={32} className="text-white" />,
   architecture: <Layers size={32} className="text-white" />,
   engineering: <Code2 size={32} className="text-white" />,
   automation: <GitMerge size={32} className="text-white" />,
@@ -36,16 +40,16 @@ const ExperienceCard = ({ exp, isLast }) => {
   );
 };
 
-const ProcessSubSection = () => {
-  const { process } = portfolioData;
+const AchievementsSubSection = () => {
+  const { achievements } = portfolioData;
   return (
     <div className="mt-32">
       <Reveal>
         <div className="mb-12">
           <div className="section-label mb-6 inline-block border border-white/10 rounded-full px-3 py-1 bg-white/[0.02]">
-            Workflow
+            Milestones
           </div>
-          <h3 className="section-subtitle mb-4">My Process</h3>
+          <h3 className="section-subtitle mb-4">Key Achievements</h3>
         </div>
       </Reveal>
       <motion.div 
@@ -56,9 +60,9 @@ const ProcessSubSection = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
       >
-        {process.map((step) => (
+        {achievements.map((step) => (
           <motion.div 
             key={step.id}
             variants={{
@@ -85,7 +89,7 @@ const ProcessSubSection = () => {
 };
 
 const Experience = () => {
-  const { experience } = portfolioData;
+  const { experience, education } = portfolioData;
   return (
     <section id="experience" className="py-32 relative z-10">
       <div className="container mx-auto px-6 max-w-6xl">
@@ -100,7 +104,7 @@ const Experience = () => {
           </div>
         </Reveal>
 
-        <div className="flex flex-col relative">
+        <div className="flex flex-col relative mb-24">
           <div className="absolute left-[11px] top-10 bottom-0 w-[2px] bg-gradient-to-b from-[#39ff14]/50 via-transparent to-transparent opacity-30"></div>
           {experience.map((exp, i) => (
             <Reveal key={exp.id} delay={i * 0.1}>
@@ -109,7 +113,42 @@ const Experience = () => {
           ))}
         </div>
 
-        <ProcessSubSection />
+        <Reveal>
+          <div className="mb-16 mt-16">
+            <h2 className="section-title">
+              Academic <br/><span className="text-white/50">Education.</span>
+            </h2>
+          </div>
+        </Reveal>
+
+        <div className="flex flex-col relative">
+          <div className="absolute left-[11px] top-10 bottom-0 w-[2px] bg-gradient-to-b from-[#39ff14]/50 via-transparent to-transparent opacity-30"></div>
+          {education.map((edu, i) => (
+            <Reveal key={edu.id} delay={i * 0.1}>
+              <div className="relative pl-8 md:pl-12 mb-12 group">
+                {/* Timeline Line */}
+                {i !== education.length - 1 && <div className="absolute left-[11px] top-12 bottom-[-48px] w-[2px] bg-gradient-to-b from-white/20 to-white/5"></div>}
+                
+                {/* Timeline Node */}
+                <div className="absolute left-0 top-8 w-6 h-6 rounded-full bg-background border-2 border-white/20 flex items-center justify-center transition-all duration-500 group-hover:border-[#39ff14] group-hover:shadow-[0_0_20px_rgba(57,255,20,0.4)] z-10">
+                   <div className="w-2 h-2 rounded-full bg-white/30 group-hover:bg-[#39ff14] group-hover:scale-150 transition-all duration-500" />
+                </div>
+
+                <div className="glass-panel p-8 md:p-10 relative flex flex-col items-start gap-4 overflow-hidden transition-all duration-500 ease-out group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
+                  <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center mb-2 gap-4">
+                    <div>
+                      <h3 className="section-subtitle text-2xl group-hover:text-[#39ff14] transition-colors duration-300">{edu.degree}</h3>
+                      <p className="text-white/70 text-lg mt-1 font-medium">{edu.institution}</p>
+                    </div>
+                    <div className="section-label whitespace-nowrap px-4 py-2 bg-white/5 rounded-full border border-white/10 group-hover:border-white/30 transition-colors duration-300">{edu.duration}</div>
+                  </div>
+                  <p className="body-text">{edu.description}</p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <AchievementsSubSection />
       </div>
     </section>
   );

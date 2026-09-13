@@ -1,6 +1,5 @@
 "use client"
-import { useRef, useMemo, useEffect, useCallback } from "react"
-import * as THREE from "three"
+import React from "react"
 
 // Pure CSS animated gradient background — zero WebGL context, ~0 GPU memory
 // Replaces the GLSL shader BackgroundLayer that was consuming a full WebGL context
