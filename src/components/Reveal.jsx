@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 
 const Reveal = ({ children, delay = 0, width = "100%", duration = 0.8 }) => {

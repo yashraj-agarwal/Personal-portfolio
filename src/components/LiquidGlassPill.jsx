@@ -1,75 +1,45 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { applyGlass, removeGlass } from '../lib/liquid-glass';
+import { useEffect, useRef } from "react";
+import { applyGlass, removeGlass } from "../lib/liquid-glass";
 
-const LiquidGlassPill = ({ itemsRefs, currentIndex, previousIndex }) => {
-  const [style, setStyle] = useState({
-    left: 0,
-    width: 0,
-    opacity: 0,
-    transformOrigin: 'center'
-  });
-  const [isMoving, setIsMoving] = useState(false);
+export default function LiquidGlassPill({ itemsRefs, currentIndex }) {
   const pillRef = useRef(null);
-
   useEffect(() => {
-    if (!pillRef.current) return;
-
-    applyGlass(pillRef.current, () => ({
-      blur: 2,
-      glassThickness: 38,
-      bezelWidth: 40,
-      ior: 1.65,
-      scaleRatio: 1.7,
-      tintColor: "255,255,255",
-      tintOpacity: 0.08,
-      specularOpacity: 0.7,
-      specularSat: 1.35,
-      balancedSpecular: true
-    }));
-
-    return () => {
-      if (pillRef.current) removeGlass(pillRef.current);
-    };
+    const pill = pillRef.current;
+    applyGlass(pill, { scaleRatio: 1.7 });
+    return () => removeGlass(pill);
   }, []);
-
   useEffect(() => {
-    const currentRef = itemsRefs.current[currentIndex];
-    if (!currentRef) return;
-
-    const { offsetLeft, offsetWidth } = currentRef;
-
-    // Determine direction for elastic stretch origin
-    let transformOrigin = 'center';
-    if (previousIndex !== null && currentIndex !== previousIndex) {
-      transformOrigin = currentIndex > previousIndex ? 'left center' : 'right center';
-      
-      // Trigger animation
-      setIsMoving(false);
-      // Small delay to restart animation
-      setTimeout(() => setIsMoving(true), 10);
-    }
-
-    setStyle({
-      left: offsetLeft,
-      width: offsetWidth,
-      opacity: 1,
-      transformOrigin
-    });
-  }, [currentIndex, previousIndex, itemsRefs]);
-
+    const pill = pillRef.current;
+    const item = itemsRefs.current[currentIndex];
+    if (!pill || !item) return;
+    let frame = 0;
+    let mounted = true;
+    const measure = () => {
+      if (!mounted) return;
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        pill.style.left = `${item.offsetLeft}px`;
+        pill.style.width = `${item.offsetWidth}px`;
+        pill.style.opacity = "1";
+      });
+    };
+    const observer = new ResizeObserver(measure);
+    observer.observe(item);
+    observer.observe(item.parentElement);
+    document.fonts.ready.then(measure);
+    measure();
+    return () => {
+      mounted = false;
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+    };
+  }, [currentIndex, itemsRefs]);
   return (
     <div
       ref={pillRef}
-      className={`liquid-glass-pill ${isMoving ? 'moving' : ''}`}
-      style={{
-        left: `${style.left}px`,
-        width: `${style.width}px`,
-        opacity: style.opacity,
-        transformOrigin: style.transformOrigin
-      }}
-      onAnimationEnd={() => setIsMoving(false)}
+      className="liquid-glass-pill"
+      aria-hidden="true"
+      style={{ opacity: 0 }}
     />
   );
-};
-
-export default LiquidGlassPill;
+}

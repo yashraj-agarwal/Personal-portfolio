@@ -1,8 +1,8 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { portfolioData } from '../data/portfolioData';
 import Reveal from './Reveal';
 import { Trophy, Star, Medal, Crown, Layers, Code2, GitMerge, Rocket } from 'lucide-react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const iconMap = {
   trophy: <Trophy size={32} className="text-white" />,

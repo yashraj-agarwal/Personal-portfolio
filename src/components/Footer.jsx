@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Mail, FileText, Check, Copy, ArrowUpRight } from 'lucide-react';
 import Reveal from './Reveal';
 
@@ -12,12 +12,21 @@ const LinkedInIcon = () => (
 
 const Footer = () => {
   const [copied, setCopied] = useState(false);
+  const [copyError, setCopyError] = useState(false);
+  const copyTimeout = useRef(null);
+  useEffect(() => () => clearTimeout(copyTimeout.current), []);
 
-  const handleCopyEmail = (e) => {
+  const handleCopyEmail = async (e) => {
     e.stopPropagation();
-    navigator.clipboard.writeText('yashraj.ghy@gmail.com');
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    clearTimeout(copyTimeout.current);
+    try {
+      await navigator.clipboard.writeText('yashraj.ghy@gmail.com');
+      setCopied(true);
+      setCopyError(false);
+    } catch {
+      setCopyError(true);
+    }
+    copyTimeout.current = setTimeout(() => { setCopied(false); setCopyError(false); }, 2500);
   };
 
   return (
@@ -41,6 +50,10 @@ const Footer = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mb-24 text-left">
             {/* Email Card */}
             <div 
+              role="link"
+              tabIndex={0}
+              aria-label="Email Yash Raj Agarwal"
+              onKeyDown={(event) => { if (event.target === event.currentTarget && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); window.location.href = 'mailto:yashraj.ghy@gmail.com'; } }}
               onClick={() => window.location.href = 'mailto:yashraj.ghy@gmail.com'}
               className="group relative glass-panel p-8 hover:bg-white/[0.03] hover:border-[#39ff14]/30 hover:shadow-[0_0_30px_rgba(57,255,20,0.08)] transition-all duration-500 rounded-[24px] flex flex-col justify-between h-56 cursor-pointer"
             >
@@ -55,9 +68,9 @@ const Footer = () => {
                     title="Copy Email"
                   >
                     {copied ? <Check className="w-4 h-4 text-[#39ff14]" /> : <Copy className="w-4 h-4" />}
-                    {copied && (
+                    {(copied || copyError) && (
                       <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-[#39ff14] text-[10px] font-spacemono py-1 px-2 rounded border border-[#39ff14]/20 whitespace-nowrap">
-                        Copied!
+                        <span role="status">{copyError ? 'Select email to copy' : 'Copied!'}</span>
                       </span>
                     )}
                   </button>
@@ -68,7 +81,7 @@ const Footer = () => {
               </div>
               <div>
                 <p className="font-spacemono text-[11px] uppercase tracking-widest text-[#39ff14]/70 mb-2">Email Me</p>
-                <h4 className="text-lg font-bold text-white transition-colors break-all">yashraj.ghy@gmail.com</h4>
+                <h4 className="text-[clamp(0.78rem,3.4vw,1.125rem)] font-bold text-white transition-colors break-all">yashraj.ghy@gmail.com</h4>
               </div>
             </div>
             

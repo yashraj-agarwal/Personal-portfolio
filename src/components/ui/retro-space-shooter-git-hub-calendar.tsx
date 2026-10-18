@@ -142,7 +142,7 @@ function formatTooltipDate(dateStr: string): string {
   }
 }
 
-function playSound(type: "laser" | "explosion" | "hit" | "victory") {
+function playSound(_type: "laser" | "explosion" | "hit" | "victory") {
   // Sound effects disabled
 }
 
@@ -662,7 +662,7 @@ export const GithubCalendar = memo(function GithubCalendar({
       });
 
       // Move Particles
-      particles.forEach((p, idx) => {
+      particles.forEach((p) => {
         p.x += p.vx;
         p.y += p.vy;
         p.life++;

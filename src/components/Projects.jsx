@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { portfolioData } from '../data/portfolioData';
 import Reveal from './Reveal';
@@ -18,12 +18,12 @@ const ICON_MAP = {
   aero: HeartPulse,
   atlas: Layers,
 };
-const getIcon = (title = '') => {
+const getIconKey = (title = '') => {
   const t = title.toLowerCase();
-  if (t.includes('net') || t.includes('sight')) return ICON_MAP.netsight;
-  if (t.includes('vaani') || t.includes('pay'))  return ICON_MAP.vaani;
-  if (t.includes('health'))                        return ICON_MAP.aero;
-  return ICON_MAP.atlas;
+  if (t.includes('net') || t.includes('sight')) return 'netsight';
+  if (t.includes('vaani') || t.includes('pay'))  return 'vaani';
+  if (t.includes('health'))                        return 'aero';
+  return 'atlas';
 };
 
 /**
@@ -50,7 +50,7 @@ const ProjectCard = ({ project, wide = false }) => {
   };
   const onLeave = () => { x.set(0); y.set(0); };
 
-  const LogoIcon = getIcon(project.title);
+  const LogoIcon = ICON_MAP[getIconKey(project.title)];
 
   // Circle ornament sizes — slightly larger for wide cards
   const circles = wide
@@ -74,7 +74,7 @@ const ProjectCard = ({ project, wide = false }) => {
 
         {/* Content — right padding reserves space for circle ornament */}
         <div
-          className="absolute [transform:translate3d(0,0,26px)] p-7"
+          className="project-card-content absolute [transform:translate3d(0,0,26px)] p-7"
           style={{ right: wide ? '175px' : '140px', left: 0, top: 0 }}
         >
           {/* Tags */}
@@ -124,7 +124,7 @@ const ProjectCard = ({ project, wide = false }) => {
         </div>
 
         {/* 3D Circle ornament + logo */}
-        <div className={`absolute top-5 right-5 group-hover:-top-5 group-hover:-right-5 transition-all duration-700 flex items-center justify-center [transform-style:preserve-3d] pointer-events-none`}
+        <div className={`project-card-ornament absolute top-5 right-5 group-hover:-top-5 group-hover:-right-5 transition-all duration-700 flex items-center justify-center [transform-style:preserve-3d] pointer-events-none`}
           style={{ width: wide ? '130px' : '110px', height: wide ? '130px' : '110px' }}>
           {circles.map((c, i) => (
             <div key={i}

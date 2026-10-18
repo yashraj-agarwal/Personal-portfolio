@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 
 const greetings = ["Hello", "Bonjour", "こんにちは", "Hallo", "Ciao", "Hola", "안녕하세요", "नमस्ते"];
 

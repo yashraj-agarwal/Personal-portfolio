@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 
 const Header = () => {
@@ -40,7 +39,7 @@ const Header = () => {
             initial="hidden"
             animate="visible"
             whileHover={{ scale: 1.1, y: -2 }}
-            className="font-spacemono text-[#39ff14] text-[clamp(0.6rem,2.2vw,0.82rem)] font-bold leading-none uppercase tracking-widest transition-all duration-300 relative group cursor-none inline-block active:scale-95"
+            className="font-spacemono text-[#39ff14] text-[clamp(0.6rem,2.2vw,0.82rem)] font-bold leading-none uppercase tracking-widest transition-all duration-300 relative group inline-flex min-h-11 items-center active:scale-95"
           >
             {link.name}
             <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-px bg-[#39ff14] transition-all duration-300 group-hover:w-full" />

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { portfolioCards } from '../data/portfolioCards';
 
 export default function FloatingGallery() {
@@ -35,14 +35,13 @@ export default function FloatingGallery() {
     const descBlock = document.getElementById('unveil-image-desc');
     const descTitle = document.getElementById('desc-title');
     const descText = document.getElementById('desc-text');
-    const introEl = document.getElementById('unveil-intro');
 
     let descTimeout;
 
     // Clear belt in case of React strict mode double render
     belt.innerHTML = '';
 
-    const cardEls = CARDS.map((data, i) => {
+    const cardEls = CARDS.map((data) => {
       const el = document.createElement('div');
 
       const cardW = (data.width || CFG.CARD_W) * M;
@@ -165,7 +164,7 @@ export default function FloatingGallery() {
           labelText.style.background = 'rgba(236,234,229,0.82)';
           labelText.style.borderColor = 'rgba(0,0,0,0.1)';
         }
-      } catch (e) { }
+      } catch { /* Keep the default label colours for unreadable images. */ }
     }
 
     cardEls.forEach((c, i) => {

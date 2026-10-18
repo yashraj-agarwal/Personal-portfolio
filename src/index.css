@@ -17,7 +17,7 @@
     overflow-x: hidden;
   }
   body {
-    @apply bg-background text-primary font-sans leading-relaxed min-h-screen cursor-none selection:bg-accent-blue/30 selection:text-white;
+    @apply bg-background text-primary font-sans leading-relaxed min-h-screen selection:bg-accent-blue/30 selection:text-white;
     width: 100%;
     overflow-x: hidden;
     word-wrap: break-word;
@@ -315,3 +315,28 @@
 .bracket-tr { top: 2rem; right: 2rem; transform: scaleX(-1); }
 .bracket-bl { bottom: 2rem; left: 2rem; transform: scaleY(-1); }
 .bracket-br { bottom: 2rem; right: 2rem; transform: scale(-1,-1); }
+
+/* Keep navigation and actions comfortably clear of phone browser chrome. */
+.interface-grid { padding-bottom: max(110px, calc(env(safe-area-inset-bottom, 0px) + 95px)); }
+html.has-custom-cursor, html.has-custom-cursor :is(a, button, input, textarea) { cursor: none; }
+:where(a, button, input, textarea):focus-visible { outline: 2px solid #39ff14; outline-offset: 4px; }
+@media (hover: none), (pointer: coarse) { .custom-cursor { display: none; } }
+@media (max-width: 599px) {
+  .project-card-content { right: 24px !important; padding: 24px; }
+  .project-card-ornament { display: none; }
+}
+@media (min-width: 1024px) and (max-height: 700px) { .hero-skyline { width: min(36vw, 450px); } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .custom-cursor { display: none; }
+}
+
+.skip-link { position: fixed; left: 16px; top: 12px; z-index: 100000; transform: translateY(-180%); padding: 12px 18px; background: #39ff14; color: #050505; border-radius: 8px; font: 12px 'Space Mono', monospace; }
+.skip-link:focus { transform: translateY(0); }
+html.has-custom-cursor dialog, html.has-custom-cursor dialog :is(a, button) { cursor: auto; }
+footer { padding-bottom: max(130px, calc(env(safe-area-inset-bottom, 0px) + 110px)) !important; }
+
+@media (max-width: 599px) {
+  .section-title { font-size: clamp(1.8rem, 7.5vw, 2.5rem); }
+}

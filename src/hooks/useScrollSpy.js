@@ -1,41 +1,39 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from "react";
 
-const useScrollSpy = (sectionIds) => {
+export default function useScrollSpy(sectionIds) {
   const [activeSection, setActiveSection] = useState(sectionIds[0]);
-
+  const sectionKey = sectionIds.join(",");
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        // Find all intersecting entries
-        const intersecting = entries.filter((entry) => entry.isIntersecting);
-        if (intersecting.length > 0) {
-          // If multiple, pick the one closest to the top of the viewport
-          const closest = intersecting.reduce((prev, current) => {
-            return prev.boundingClientRect.top > current.boundingClientRect.top
-              ? prev
-              : current;
-          });
-          setActiveSection(closest.target.id);
-        }
-      },
-      {
-        root: null,
-        rootMargin: '-20% 0px -60% 0px',
-        threshold: 0,
-      }
-    );
-
-    sectionIds.forEach((id) => {
-      const element = document.getElementById(id);
-      if (element) {
-        observer.observe(element);
-      }
-    });
-
-    return () => observer.disconnect();
-  }, [sectionIds]);
-
+    const ids = sectionKey.split(",");
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const sections = ids
+        .map((id) => document.getElementById(id))
+        .filter(Boolean);
+      const current = sections
+        .filter(
+          (node) =>
+            node.getBoundingClientRect().top <= window.innerHeight * 0.4,
+        )
+        .at(-1);
+      setActiveSection(current?.id ?? ids[0]);
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    const observer = new MutationObserver(schedule);
+    const root = document.getElementById("root");
+    if (root) observer.observe(root, { childList: true, subtree: true });
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule, { passive: true });
+    schedule();
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+    };
+  }, [sectionKey]);
   return activeSection;
-};
-
-export default useScrollSpy;
+}

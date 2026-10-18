@@ -1,74 +1,43 @@
 # Yash Raj Agarwal — Portfolio
 
-A premium, dark-themed developer portfolio built with **React**, **Three.js**, and **Framer Motion**. Features a 3D laptop model, ASCII art portrait, liquid glass UI, and immersive scroll animations.
+React 19, Vite, Tailwind CSS, TypeScript, Framer Motion, and Three.js.
 
-## ✨ Features
+## Pages
 
-- 🖥 **3D ASUS ROG laptop model** with real-time cursor parallax (Three.js / R3F)
-- 🟢 **ASCII art portrait** rendered as live green monospace text
-- 💧 **Liquid glass navbar** with Apple-style frosted blur
-- 🎬 **Scroll-driven animations** via Framer Motion and Lenis smooth scroll
-- ✍️ **Text scramble role indicator** in the hero section
-- 📱 **Fully responsive** — mobile, tablet, and desktop
-- ⚡ **Vite** for instant HMR and optimised production builds
+- `/` — developer portfolio, interactive GitHub contribution skyline, projects, experience, and contact.
+- `/design` — responsive masonry collection of mockups, interfaces, and posters with category filters and an accessible full-screen viewer.
+- `/frames` — animated photography archive with wheel, keyboard, and touch navigation; a static gallery is used when WebGL is unavailable or reduced motion is preferred.
 
-## 🗂 Project Structure
-
-```
-src/
-├── components/          # All UI components
-│   ├── ui/              # Reusable primitives (glass-button, TextScramble, …)
-│   ├── Hero.jsx         # Landing hero with 3D canvas
-│   ├── ThreeMacbook.jsx # R3F laptop model component
-│   ├── About.jsx        # About section with ASCII portrait
-│   ├── Projects.jsx     # Project cards with 3D tilt
-│   ├── Experience.jsx   # Timeline section
-│   ├── Skills.jsx       # Skill pills
-│   ├── Footer.jsx       # Footer with contact links
-│   └── …
-├── data/
-│   └── portfolioData.js # All portfolio content (projects, experience, skills)
-├── styles/
-│   └── liquid-glass.css # Custom glassmorphism styles
-├── pages/
-│   └── Home.jsx         # Main page composition
-├── App.jsx              # Router & global layout
-├── main.jsx             # React entry point
-└── index.css            # Global styles & design tokens
-public/
-├── ascii-art.txt        # ASCII art source (fetched at runtime)
-├── resume.pdf           # Downloadable resume
-├── favicon.svg          # Site icon
-└── asus_rog_strix_scar_17_2023_g733_gaming_laptop.glb  # 3D model
-```
-
-## 🚀 Getting Started
+## Development
 
 ```bash
-# Install dependencies
-npm install
-
-# Run dev server
+npm ci
 npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
+npm run check
 npm run preview
 ```
 
-## 🛠 Tech Stack
+`npm run check` runs ESLint, TypeScript, asset validation, contribution/statistics checks, and the production build.
 
-| Layer        | Technology                                    |
-|--------------|-----------------------------------------------|
-| Framework    | React 19 + Vite 8                             |
-| 3D           | Three.js · @react-three/fiber · @react-three/drei |
-| Animation    | Framer Motion · Lenis (smooth scroll)         |
-| Styling      | Tailwind CSS · Vanilla CSS                    |
-| UI           | Lucide React · Radix UI                       |
-| Routing      | React Router DOM v7                           |
+## Images
 
-## 📄 License
+Original photographs are in `public/portfolio/`. Design source images are in `New folder/`. Keep the originals; pages use optimized copies instead.
 
-MIT — feel free to use as inspiration but please don't copy the content directly.
+```bash
+npm run optimize:frames
+npm run optimize:design
+```
+
+The photography pipeline creates 1280-pixel desktop and 768-pixel phone WebP textures plus `src/data/framesImages.json`. The Design pipeline creates responsive 640/1280/2000-pixel WebP images and `src/data/designWorks.json`. Edit titles and categories in `scripts/optimize-design.mjs`, then regenerate.
+
+Design images use native lazy loading, responsive `srcset`, and reserved dimensions. Frames loads independently from the landing page, limits pixel density and visible planes on phones, and pauses rendering offscreen or in a hidden tab. The custom cursor runs only with a mouse and stops when idle.
+
+## Deployment
+
+Build command: `npm run build`. Output directory: `dist/`.
+
+`vercel.json` and `public/_redirects` provide direct-route refresh support for `/design` and `/frames` on Vercel and Netlify. Other static hosts must serve `index.html` for those routes. The development server and Vite preview already do this.
+
+GitHub contributions depend on `github-contributions-api.jogruber.de`; unavailable or slow responses show an error with retry rather than generated activity.
+
+See [the audit record](docs/quality-audit.md) for validation scope and remaining limitations.

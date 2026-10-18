@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import Hero from '../components/Hero';
 
 // Lazy-load all below-the-fold sections so their JS is only parsed + executed

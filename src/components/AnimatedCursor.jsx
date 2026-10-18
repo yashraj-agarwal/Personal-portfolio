@@ -1,69 +1,91 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
-const AnimatedCursor = () => {
+const colors = [
+  "#f2f2f2",
+  "#e6e6e6",
+  "#ccc",
+  "#b3b3b3",
+  "#999",
+  "#808080",
+  "#666",
+  "#4d4d4d",
+  "#333",
+  "#1a1a1a",
+];
+
+export default function AnimatedCursor() {
   const circlesRef = useRef([]);
-  const coords = useRef({ x: 0, y: 0 });
-
-  const cursorColors = [
-    "#f2f2f2", "#e6e6e6", "#cccccc", "#b3b3b3", "#999999", 
-    "#808080", "#666666", "#4d4d4d", "#333333", "#1a1a1a",
-    "#050505", "#050505", "#050505", "#050505", "#050505",
-    "#050505", "#050505", "#050505", "#050505", "#050505"
-  ];
-
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      coords.current.x = e.clientX;
-      coords.current.y = e.clientY;
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-
-    let animationFrameId;
-
-    const animateCircles = () => {
-      let x = coords.current.x;
-      let y = coords.current.y;
-
-      circlesRef.current.forEach((circle, index) => {
-        if (!circle) return;
-        
-        // 12px offset centers the 24x24px cursor
-        circle.style.transform = `translate3d(${x - 12}px, ${y - 12}px, 0) scale(${(20 - index) / 20})`;
-
-        circle.x = x;
-        circle.y = y;
-
-        const nextCircle = circlesRef.current[index + 1] || circlesRef.current[0];
-        if (nextCircle) {
-          x += (nextCircle.x - x) * 0.3;
-          y += (nextCircle.y - y) * 0.3;
-        }
+    const media = window.matchMedia(
+      "(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)",
+    );
+    const nodes = circlesRef.current.filter(Boolean);
+    const points = colors.map(() => ({ x: 0, y: 0 }));
+    let target = { x: 0, y: 0 };
+    let frame = 0;
+    let initialized = false;
+    const hide = () => {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      initialized = false;
+      document.documentElement.classList.remove("has-custom-cursor");
+      nodes.forEach((node) => {
+        node.style.opacity = "0";
       });
-
-      animationFrameId = requestAnimationFrame(animateCircles);
     };
-
-    animateCircles();
-
+    const draw = () => {
+      let moving = false;
+      points.forEach((point, index) => {
+        const next = index === 0 ? target : points[index - 1];
+        point.x += (next.x - point.x) * (index === 0 ? 1 : 0.38);
+        point.y += (next.y - point.y) * (index === 0 ? 1 : 0.38);
+        if (Math.abs(point.x - target.x) + Math.abs(point.y - target.y) > 0.1)
+          moving = true;
+        nodes[index].style.transform =
+          `translate3d(${point.x - 10}px, ${point.y - 10}px, 0) scale(${(colors.length - index) / colors.length})`;
+      });
+      frame = moving ? requestAnimationFrame(draw) : 0;
+    };
+    const move = (event) => {
+      if (!media.matches || event.pointerType !== "mouse") return;
+      target = { x: event.clientX, y: event.clientY };
+      if (!initialized) {
+        points.forEach((point) => {
+          point.x = target.x;
+          point.y = target.y;
+        });
+        nodes.forEach((node) => {
+          node.style.opacity = "1";
+        });
+        initialized = true;
+        document.documentElement.classList.add("has-custom-cursor");
+      }
+      if (!frame) frame = requestAnimationFrame(draw);
+    };
+    const visibility = () => {
+      if (document.hidden) hide();
+    };
+    window.addEventListener("pointermove", move, { passive: true });
+    document.addEventListener("pointerleave", hide);
+    document.addEventListener("visibilitychange", visibility);
+    media.addEventListener("change", hide);
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      cancelAnimationFrame(animationFrameId);
+      hide();
+      window.removeEventListener("pointermove", move);
+      document.removeEventListener("pointerleave", hide);
+      document.removeEventListener("visibilitychange", visibility);
+      media.removeEventListener("change", hide);
     };
   }, []);
-
-  return (
-    <>
-      {cursorColors.map((color, index) => (
-        <div
-          key={index}
-          ref={(el) => (circlesRef.current[index] = el)}
-          className="fixed top-0 left-0 w-6 h-6 rounded-full pointer-events-none z-[9999999] mix-blend-difference"
-          style={{ backgroundColor: color }}
-        />
-      ))}
-    </>
-  );
-};
-
-export default AnimatedCursor;
+  return colors.map((color, index) => (
+    <div
+      key={color}
+      ref={(node) => {
+        circlesRef.current[index] = node;
+      }}
+      aria-hidden="true"
+      className="custom-cursor fixed left-0 top-0 h-5 w-5 rounded-full pointer-events-none z-[9999999] mix-blend-difference"
+      style={{ backgroundColor: color, opacity: 0 }}
+    />
+  ));
+}

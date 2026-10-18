@@ -22,6 +22,10 @@
   transition: all 440ms cubic-bezier(1, 0, .4, 1);
   pointer-events: auto;
   max-width: calc(100vw - 2rem);
+  width: max-content;
+  /* Clip the translated shine and elastic pill to the stationary glass shell. */
+  overflow: hidden;
+  isolation: isolate;
 
   background: rgba(255, 255, 255, .005);
 
@@ -138,6 +142,8 @@
 
 .liquid-glass-nav .nav-item {
   position: relative;
+  flex-shrink: 0;
+  white-space: nowrap;
   z-index: 2;
   display: flex;
   align-items: center;
@@ -245,4 +251,11 @@
     width: 18px;
     height: 18px;
   }
+}
+
+.liquid-glass-nav .nav-item:focus-visible { outline: 2px solid #39ff14; outline-offset: -4px; }
+@media (max-width: 480px) {
+  .liquid-glass-nav { height: 58px; bottom: max(20px, calc(env(safe-area-inset-bottom, 0px) + 12px)); }
+  .liquid-glass-nav .nav-item { width: 44px; height: 44px; padding: 0; justify-content: center; }
+  .liquid-glass-pill { top: 6px; bottom: 6px; }
 }
