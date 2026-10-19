@@ -117,6 +117,78 @@ const works = [
     "Posters",
     "A bold social campaign built around everyday moments.",
   ],
+  [
+    "Black and Gold Classy Elegant Restaurant Menu.png",
+    "A taste of comfort",
+    "Posters",
+    "An elegant fine-dining menu composed in black and gold typography.",
+  ],
+  [
+    "Brown Modern Food Instagram Story.png",
+    "Craving spice",
+    "Posters",
+    "A bold editorial food story exploring warmth, appetite and type.",
+  ],
+  [
+    "Home.png",
+    "Dream college",
+    "Interfaces",
+    "A mobile discovery experience tailored for academic exploration.",
+  ],
+  [
+    "Invitation Final.png",
+    "Silver anniversary",
+    "Posters",
+    "A corporate milestone celebration invitation rendered in gold foil tones.",
+  ],
+  [
+    "Screenshot 2026-06-08 034720.png",
+    "Unveil in depth",
+    "Interfaces",
+    "A three-dimensional gallery deck rendered with glassmorphic layers.",
+  ],
+  [
+    "Screenshot 2026-06-15 132206.png",
+    "Surface tension",
+    "Mockups",
+    "A hardware-focused portfolio hero bathed in dark neon atmosphere.",
+  ],
+  [
+    "Screenshot 2026-08-09 151405.png",
+    "Efferd analytics",
+    "Interfaces",
+    "A minimalist dark dashboard tracking product velocity and revenue.",
+  ],
+  [
+    "Screenshot 2026-09-17 221917.png",
+    "Follow the facts",
+    "Interfaces",
+    "A high-contrast editorial landing experience built for intelligence systems.",
+  ],
+  [
+    "Screenshot 2026-10-18 005221.png",
+    "Regional distribution",
+    "Interfaces",
+    "A corporate digital presence mapping regional enterprise logistics.",
+  ],
+  [
+    "Screenshot 2026-10-18 133201.png",
+    "A journey that's yours",
+    "Interfaces",
+    "An editorial travel hero balancing sweeping landscape and serif type.",
+  ],
+  [
+    "THUMBNAIL 2 (1).png",
+    "Upper back release",
+    "Posters",
+    "A high-impact digital composition pairing anatomical study with punchy type.",
+  ],
+  [
+    "Untitled design (1).png",
+    "Buddy's best gift",
+    "Posters",
+    "A colourful promotional piece designed for pet accessories and play.",
+  ],
 ];
 await fs.mkdir("public/design", { recursive: true });
 let originalBytes = 0,
